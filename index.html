@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বাংলাদেশ আবহ | BPL 2025 Live</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
+    <style>
+        /* Basic styling */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #1d3557, #457b9d);
+            color: #fff;
+            text-align: center;
+        }
+        header {
+            padding: 20px;
+            background: #1d3557;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+        }
+        main {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #e63946;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #d62839;
+        }
+        #videoPlayerContainer {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>বাংলাদেশ আবহ</h1>
+        <p>BPL 2025 সরাসরি দেখুন!</p>
+    </header>
+    <main>
+        <div>
+            <button id="bplButton">BPL 2025 | Watch Now</button>
+        </div>
+        <div id="videoPlayerContainer">
+            <video id="videoPlayer" class="plyr" playsinline controls>
+                <source src="https://live-cdn.tsports.com/live-02/master_1080.m3u8" type="application/x-mpegURL">
+            </video>
+        </div>
+    </main>
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+    <script>
+        // Video Player Initialization
+        document.getElementById('bplButton').addEventListener('click', () => {
+            const videoContainer = document.getElementById('videoPlayerContainer');
+            videoContainer.style.display = 'block';
+
+            const player = new Plyr('#videoPlayer', {
+                controls: [
+                    'play', 
+                    'progress', 
+                    'current-time', 
+                    'mute', 
+                    'volume', 
+                    'settings', 
+                    'fullscreen'
+                ],
+                settings: ['quality', 'speed', 'loop'],
+                quality: {
+                    default: 720,
+                    options: [360, 480, 720, 1080], // Automatically adjusts to the link's available qualities
+                },
+            });
+
+            // Log if the M3U8 link loads successfully
+            player.on('ready', () => {
+                console.log('Player ready with M3U8 link.');
+            });
+        });
+    </script>
+</body>
+</html>
