@@ -3,96 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> BPL 2025 Live</title>
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
+    <title>Password Generator</title>
     <style>
-        /* Basic styling */
         body {
+            font-family: 'Courier New', Courier, monospace;
+            background: radial-gradient(circle, #000000, #0a0a0a, #141414, #1e1e1e, #282828);
+            color: #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, #1d3557, #457b9d);
-            color: #fff;
+        }
+
+        .container {
             text-align: center;
-        }
-        header {
             padding: 20px;
-            background: #1d3557;
+            border: 3px solid #00ff00;
+            border-radius: 10px;
+            background: #000000;
+            box-shadow: 0 0 30px #00ff00;
         }
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
+
+        h1 {
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #00ff00;
         }
-        header p {
-            margin: 10px 0 0;
-            font-size: 1.2rem;
+
+        .input-field {
+            margin: 10px 0;
         }
-        main {
-            margin-top: 20px;
-        }
-        button {
-            background-color: #e63946;
-            color: white;
-            padding: 15px 30px;
-            border: none;
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #00ff00;
             border-radius: 5px;
-            font-size: 1.2rem;
+            background: #1f1f1f;
+            color: #00ff00;
+            font-size: 16px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #00ff00, #007f00);
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #000;
             cursor: pointer;
-            transition: background-color 0.3s;
+            border-radius: 5px;
         }
+
         button:hover {
-            background-color: #d62839;
+            background: linear-gradient(45deg, #007f00, #00ff00);
         }
-        #videoPlayerContainer {
-            display: none;
+
+        .output {
             margin-top: 20px;
+            font-size: 18px;
+            word-break: break-word;
+            text-shadow: 0 0 10px #007f00;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #007f00;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1></h1>
-        <p></p>
-    </header>
-    <main>
-        <div>
-            <button id="bplButton">BPL 2025 | Watch Now</button>
+    <div class="container">
+        <h1>Password Generator</h1>
+        <div class="input-field">
+            <label for="keywords">Keywords (comma-separated):</label><br>
+            <input type="text" id="keywords" placeholder="Enter keywords">
         </div>
-        <div id="videoPlayerContainer">
-            <video id="videoPlayer" class="plyr" playsinline controls>
-                <source src="https://t.bdixtv24.com/tsportshd/stream.php?stream=https://live-cdn.tsports.com/live-02/master_1080.m3u8" type="application/x-mpegURL">
-            </video>
+        <div class="input-field">
+            <label for="length">Password Length:</label><br>
+            <input type="text" id="length" placeholder="Default is 16">
         </div>
-    </main>
-    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+        <div class="input-field">
+            <button onclick="generatePassword(true)">Generate with Keywords</button>
+            <button onclick="generatePassword(false)">Generate Automatically</button>
+        </div>
+        <div class="output" id="output"></div>
+        <footer>Hacking-Themed Password Generator by Joyesh</footer>
+    </div>
+
     <script>
-        // Video Player Initialization
-        document.getElementById('bplButton').addEventListener('click', () => {
-            const videoContainer = document.getElementById('videoPlayerContainer');
-            videoContainer.style.display = 'block';
+        function generatePassword(useKeywords) {
+            const keywordsInput = document.getElementById('keywords').value;
+            const lengthInput = document.getElementById('length').value;
+            const length = parseInt(lengthInput) || 16;
+            const output = document.getElementById('output');
 
-            const player = new Plyr('#videoPlayer', {
-                controls: [
-                    'play', 
-                    'progress', 
-                    'current-time', 
-                    'mute', 
-                    'volume', 
-                    'settings', 
-                    'fullscreen'
-                ],
-                settings: ['quality', 'speed', 'loop'],
-                quality: {
-                    default: 720,
-                    options: [360, 480, 720, 1080], // Automatically adjusts to the link's available qualities
-                },
-            });
+            const lower = 'abcdefghijklmnopqrstuvwxyz';
+            const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const digits = '0123456789';
+            const special = '!@#$%^&*()_+[]{}|;:,.<>?';
+            const allChars = lower + upper + digits + special;
 
-            // Log if the M3U8 link loads successfully
-            player.on('ready', () => {
-                console.log('Player ready with M3U8 link.');
-            });
-        });
+            let password = '';
+
+            function getRandomChar(set) {
+                return set[Math.floor(Math.random() * set.length)];
+            }
+
+            if (useKeywords && keywordsInput) {
+                const keywords = keywordsInput.split(',').join('');
+                const combinedChars = keywords + allChars;
+
+                password += getRandomChar(keywords);
+                password += getRandomChar(lower);
+                password += getRandomChar(upper);
+                password += getRandomChar(digits);
+                password += getRandomChar(special);
+
+                for (let i = 5; i < length; i++) {
+                    password += getRandomChar(combinedChars);
+                }
+            } else {
+                password += getRandomChar(lower);
+                password += getRandomChar(upper);
+                password += getRandomChar(digits);
+                password += getRandomChar(special);
+
+                for (let i = 4; i < length; i++) {
+                    password += getRandomChar(allChars);
+                }
+            }
+
+            // Shuffle password to prevent patterns
+            password = password.split('').sort(() => Math.random() - 0.5).join('');
+
+            output.textContent = `Generated Password: ${password}`;
+        }
     </script>
 </body>
 </html>
